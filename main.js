@@ -17,11 +17,27 @@ const start = () => {
 	const input = document.getElementById("guess");
 	const btn = document.getElementById("guessBtn");
 	const table = document.getElementById("history");
+	const score = document.getElementById("score");
+	const high_score = document.getElementById("highScore");
+
+	score.innerText(currentScore);
 
 	let history = [];
 
+	const highScore = localStorage.getItem(highScore);
+	if (highScore) {
+		high_score.innerText = highScore;
+	}
+
+	let currentScore = 1000 * numberOfDigits;
+
+	score.innerText=currentScore;
+
+
 	btn.addEventListener("click", () => {
-		if (+input.value.length === +numberOfDigits &&  input.value.match(/\d/)) {
+		if (+input.value.length === +numberOfDigits &&
+			input.value.match(/\d/)
+			&& checkUnique(+input.value)) {
 			const tr = document.createElement('tr');
 			const td1 = document.createElement('td');
 			const td2 = document.createElement('td');
@@ -30,6 +46,10 @@ const start = () => {
 			]);
 
 			if (!history.includes(input.value)) {
+				if (currentScore >10){
+          currentScore = currentScore - 10 * history.length;
+				}
+				score.innerText=currentScore;
 				history.push(input.value);
 
 				td1.innerText = input.value;
@@ -37,10 +57,11 @@ const start = () => {
 				tr1.appendChild(td1);
 				tr2.appendChild(td1);
 				table.appendChild(tr);
+				input.value = "";
 			} else {
 				alert('This number already used');
 			}
-		} else {alert (`You should enter number with ${numberOfDigits} digits!`) }
+		} else {alert (`You should enter number with ${numberOfDigits} unique digits!`) }
 		
 			
 	});
@@ -50,6 +71,19 @@ const start = () => {
 const getRandomIndex = () => {
 	return (+Math.random().toFixed(1) * 10)
 };
+
+const checkUnique = (number) => { 
+	let arr = `${number}`.split("");
+	let uniqueSet = [];
+	for (let i = 0; i < arr.length; i++) {
+		if (uniqueSet.includes(arr[i])) {
+			return false
+		}
+		uniqueSet.push(arr[i]);
+	}
+	
+	return true;
+}
 
 const juniorsAndAlgorithm = (answer, guess) => {
 	let juniors = 0;
@@ -65,6 +99,8 @@ const juniorsAndAlgorithm = (answer, guess) => {
 		}
 	}
 	if (seniors === answer, length) {
+		const score = document.getElementById("score");
+		localStorage.setItem("highScore",+score.innerText);
 		alert("You win!");
 		location.reload();
 	}

@@ -10,4 +10,14 @@ display: flex;
 align-items: center;
 justify-content: center;
 height: 100vh;
+position: relative;
+}
+
+#scores {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	width: 300px;
+	display: flex;
+	gap: 10px;
 }
