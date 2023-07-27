@@ -1,7 +1,7 @@
 const start = () => {
-	const numberOfDigits = +promt("Enter number of digits");
+	const numberOfDigits = +prompt("Enter number of digits");
 	if (number.isNaN(numberOfDigits) || numberOfDigits < 2 || numberOfDigits > 9) {
-		alert("Enter number beetwen 2 and 9 inclusively");
+		alert("Enter number between 2 and 9 inclusively");
 		start();
 		return;
 	}
@@ -18,17 +18,31 @@ const start = () => {
 	const btn = document.getElementById("guessBtn");
 	const table = document.getElementById("history");
 
-		btn.addEventListener("click", () => {
-		const tr = document.createElement("tr");
-			const td1 = document.createElement("td");
+	let history = [];
+
+	btn.addEventListener("click", () => {
+		if (+input.value.length === +numberOfDigits &&  input.value.match(/\d/)) {
+			const tr = document.createElement('tr');
+			const td1 = document.createElement('td');
 			const td2 = document.createElement('td');
-		const [juniors, seniors] = juniorsAndSeniorsAlgorithm(answer,[...input.value])
+			const [juniors, seniors] = juniorsAndSeniorsAlgorithm(answer, [
+				...input.value,
+			]);
+
+			if (!history.includes(input.value)) {
+				history.push(input.value);
+
+				td1.innerText = input.value;
+				td2.innerText = `${juniors}J${seniors}S`;
+				tr1.appendChild(td1);
+				tr2.appendChild(td1);
+				table.appendChild(tr);
+			} else {
+				alert('This number already used');
+			}
+		} else {alert (`You should enter number with ${numberOfDigits} digits!`) }
 		
-			td1.innerText = input.value;
-			td2.innerText = `${juniors}J${seniors}S`;
-			tr1.appendChild(td1);
-			tr2.appendChild(td1);
-		table.appendChild(tr);
+			
 	});
 	
 };
@@ -50,7 +64,11 @@ const juniorsAndAlgorithm = (answer, guess) => {
 			juniors++;
 		}
 	}
+	if (seniors === answer, length) {
+		alert("You win!");
+		location.reload();
+	}
 	return [juniors,seniors]
 };
 
-start();
+	start();
